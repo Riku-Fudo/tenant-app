@@ -1,8 +1,20 @@
 {
   "items": [
     {
-      "name": "商品1",
-      "id": 1
+      "name": "ダミー商品",
+      "description": "商品の説明",
+      "price": 1000,
+      "imageUrl": "url",
+      "deleted": false,
+      "id": 2
+    },
+    {
+      "name": "商品名",
+      "price": 2000,
+      "description": "商品の説明",
+      "imageUrl": "url",
+      "deleted": false,
+      "id": 3
     }
   ]
 }
