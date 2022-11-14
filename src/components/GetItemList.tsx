@@ -2,7 +2,8 @@ import UseSWR from 'swr';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-function GetItemList() {
+// 商品一覧の取得と描画
+export default function GetItemList() {
   // 商品一覧を取得する
   const { data, error } = UseSWR(
     'api/items',
@@ -40,5 +41,3 @@ function GetItemList() {
     </table>
   );
 }
-
-export default GetItemList;
