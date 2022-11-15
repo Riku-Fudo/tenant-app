@@ -1,12 +1,12 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Link from 'next/link';
-type FormValues = {name: string, description:string, price:number,imageUrl: string};
+type FormValues = {name: string, description:string, price:number,imageUrl: string, deleted:boolean};
 
 export default function Regist() {
 
   const { register, handleSubmit, formState: { errors }} = useForm<FormValues>();
-  // const onSubmit:SubmitHandler<FormValues> = (data) => console.log(data);
   const onSubmit:SubmitHandler<FormValues> = (data) => {
+  data.deleted = false;
   fetch('http://localhost:8000/items',{method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify(data),}).then((response) => {console.log(response)});
   };
 

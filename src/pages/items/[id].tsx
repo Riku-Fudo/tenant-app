@@ -1,7 +1,6 @@
 import { GetItemId } from 'components/GetItemId';
 import { GetItemDetail } from 'components/GetItemDetail';
-import UseSWR from 'swr';
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import Link from "next/link";
 
 // jsonの型
 type Item = {
@@ -14,8 +13,8 @@ type Item = {
 };
 
 export async function getStaticPaths() {
-  //   const paths = GetItemId();
-  // 商品ID一覧を取得する
+  //const paths = GetItemId();
+  //商品ID一覧を取得する
   const res = await fetch('http://localhost:8000/items/');
   const posts = await res.json();
   const paths = posts.map((item: Item) => ({
@@ -40,29 +39,26 @@ export async function getStaticProps({ params}: {params: { id: string };}) {
 
 export default function detail({ data }: { data: Item }) {
   return (
-    <table>
-      <tr>
-        <th>ID</th>
-        <th>商品名</th>
-        <th>商品の説明</th>
-        <th>価格</th>
-        <th>イメージ画像</th>
-        <th>削除フラグ</th>
-      </tr>
-      <tr>
-        {/* <td>{data.id}</td>
-        <td>{data.name}</td>
-        <td>{data.description}</td>
-        <td>{data.price}</td>
-        <td>{data.imageUrl}</td>
-        <td>{data.imageUrl}</td> */}
-        <td>ID</td>
-        <td>Name</td>
-        <td>BB</td>
-        <td>AAA</td>
-        <td>URL</td>
-        <td>true</td>
-      </tr>
-    </table>
+    <>
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>商品名</th>
+          <th>商品の説明</th>
+          <th>価格</th>
+          <th>イメージ画像</th>
+          <th>削除フラグ</th>
+        </tr>
+        <tr>
+          <td>{data.id}</td>
+          <td>{data.name}</td>
+          <td>{data.description}</td>
+          <td>{data.price}</td>
+          <td>{data.imageUrl}</td>
+          <td>{data.deleted ? 'true':'false'}</td>
+        </tr>
+      </table>
+    <Link href="/">一覧へ</Link>
+    </>
   );
 }

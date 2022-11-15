@@ -36,7 +36,7 @@ export default function GetItemList() {
             <td>{item.name}</td>
             <td>{item.description}</td>
             <td>
-              <Link href="/">詳細</Link>
+              <Link href={`/items/${item.id}`}>詳細</Link>
             </td>
             <td>
               <button type="submit" onClick={() => del(item.id)}>削除</button>
