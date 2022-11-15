@@ -1,13 +1,26 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Link from 'next/link';
-type FormValues = {name: string, description:string, price:number,imageUrl: string, deleted:boolean};
+import { FetchData } from '../../../posts/post';
+
+type FormValues = {
+  name: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+  deleted: boolean;
+};
 
 export default function Regist() {
-
-  const { register, handleSubmit, formState: { errors }} = useForm<FormValues>();
-  const onSubmit:SubmitHandler<FormValues> = (data) => {
-  data.deleted = false;
-  fetch('http://localhost:8000/items',{method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify(data),}).then((response) => {console.log(response)});
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FormValues>({defaultValues: {deleted:false}});
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    FetchData(data,'POST').then(() => {
+      reset();
+    });
   };
 
   return (
@@ -17,8 +30,13 @@ export default function Regist() {
         <ul>
           <li>
             <label id="name">商品名：</label>
-            <input id="name" {...register('name', {required: true})} />
-            {errors.name && <div className="errorMessage">入力が必須の項目です</div>}
+            <input
+              id="name"
+              {...register('name', { required: true })}
+            />
+            {errors.name && (
+              <div className="errorMessage">入力が必須の項目です</div>
+            )}
           </li>
           <li>
             <label id="description">説明：</label>
