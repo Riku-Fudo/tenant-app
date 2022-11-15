@@ -1,7 +1,8 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import styles from '../../styles/Home.module.css';
+import styles from '../styles/Home.module.css';
 import GetItemList from 'components/GetItemList';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <GetItemList />
+        <Link href="/items/create">登録画面へ</Link>
       </main>
 
       <footer className={styles.footer}>
