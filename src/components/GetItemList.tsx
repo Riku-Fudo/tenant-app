@@ -1,6 +1,12 @@
 import UseSWR from 'swr';
+import Link from "next/link";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+const del = (id:number) => {
+  const data = {deleted: true};
+  fetch(`http://localhost:8000/items/${id}`,{method: 'PATCH', headers:{'Content-Type': 'application/json'}, body: JSON.stringify(data),}).then((response) => {console.log(response)});
+};
 
 // 商品一覧の取得と描画
 export default function GetItemList() {
@@ -23,17 +29,17 @@ export default function GetItemList() {
         <th>詳細画面へ</th>
         <th>削除</th>
       </tr>
-      {data.map(
-        (item: { id: number; name: string; description: string }) => (
+      {data.filter((item:{deleted: boolean}) => !item.deleted).map(
+        (item: { id: number; name: string; description: string}) => (
           <tr key={item.id}>
             <td>{item.id}</td>
             <td>{item.name}</td>
             <td>{item.description}</td>
             <td>
-              <button type="submit">詳細</button>
+              <Link href="/">詳細</Link>
             </td>
             <td>
-              <button type="submit">削除</button>
+              <button type="submit" onClick={() => del(item.id)}>削除</button>
             </td>
           </tr>
         )

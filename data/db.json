@@ -21,6 +21,7 @@
       "description": "お試しです",
       "price": "5000",
       "imageUrl": "url",
+      "deleted": false,
       "id": 4
     },
     {
@@ -28,6 +29,7 @@
       "description": "description",
       "price": "4000",
       "imageUrl": "aaa",
+      "deleted": true,
       "id": 5
     }
   ]
