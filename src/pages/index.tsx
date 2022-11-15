@@ -4,6 +4,16 @@ import styles from '../styles/Home.module.css';
 import GetItemList from 'components/GetItemList';
 import Link from 'next/link';
 
+// jsonの型
+type Item = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+  deleted: boolean;
+};
+
 export default function Home() {
   return (
     <div className={styles.container}>

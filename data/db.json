@@ -1,7 +1,7 @@
 {
   "items": [
     {
-      "name": "ダミー商品",
+      "name": "商品2",
       "description": "商品の説明",
       "price": 1000,
       "imageUrl": "url",
@@ -9,7 +9,7 @@
       "id": 2
     },
     {
-      "name": "商品名",
+      "name": "商品名3",
       "price": 2000,
       "description": "商品の説明",
       "imageUrl": "url",
@@ -29,24 +29,48 @@
       "description": "description",
       "price": "4000",
       "imageUrl": "aaa",
-      "deleted": true,
+      "deleted": false,
       "id": 5
     },
     {
-      "name": "練習素材",
+      "name": "更新素材",
       "description": "お試しです",
-      "price": "1111",
+      "price": 1111,
       "imageUrl": "urlurlurl",
       "deleted": false,
       "id": 6
     },
     {
-      "name": "商品7",
+      "name": "更新した商品です",
       "description": "description",
-      "price": "2222",
+      "price": 1111,
       "imageUrl": "url",
       "deleted": false,
       "id": 7
+    },
+    {
+      "name": "商品8",
+      "description": "description",
+      "price": 110,
+      "imageUrl": "/images/item.jpg",
+      "deleted": false,
+      "id": 8
+    },
+    {
+      "name": "ドーナツ",
+      "description": "ドーナツ",
+      "price": 500,
+      "imageUrl": "/images/donatu.jpg",
+      "deleted": false,
+      "id": 9
+    },
+    {
+      "deleted": false,
+      "name": "練習素材",
+      "description": "お試しです",
+      "price": "6000",
+      "imageUrl": "url",
+      "id": 10
     }
   ]
 }

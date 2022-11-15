@@ -1,18 +1,21 @@
 import UseSWR from 'swr';
 import Link from "next/link";
+import { FetchData } from '../../posts/post';
+import { useRouter } from 'next/router'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const del = (id:number) => {
-  const data = {deleted: true};
-  fetch(`http://localhost:8000/items/${id}`,{method: 'PATCH', headers:{'Content-Type': 'application/json'}, body: JSON.stringify(data),}).then((response) => {console.log(response)});
-};
-
 // 商品一覧の取得と描画
 export default function GetItemList() {
+  const router = useRouter();
+  const del = (id:number) => {
+    const data = {id: id, deleted: true};
+    FetchData(data,'PATCH').then(() => router.reload());
+  };
+
   // 商品一覧を取得する
   const { data, error } = UseSWR(
-    'api/items',
+    'api/items?deleted=false',
     fetcher
   );
   // エラーなら一覧取得失敗を画面表示
@@ -29,7 +32,7 @@ export default function GetItemList() {
         <th>詳細画面へ</th>
         <th>削除</th>
       </tr>
-      {data.filter((item:{deleted: boolean}) => !item.deleted).map(
+      {data.map(
         (item: { id: number; name: string; description: string}) => (
           <tr key={item.id}>
             <td>{item.id}</td>
