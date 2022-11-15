@@ -18,5 +18,5 @@ export async function GetItemId() {
     },
   }))
 
-  return { paths};
+  return {paths};
 }
