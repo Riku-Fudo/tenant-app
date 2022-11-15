@@ -15,6 +15,20 @@
       "imageUrl": "url",
       "deleted": false,
       "id": 3
+    },
+    {
+      "name": "練習素材",
+      "description": "お試しです",
+      "price": "5000",
+      "imageUrl": "url",
+      "id": 4
+    },
+    {
+      "name": "練習素材",
+      "description": "description",
+      "price": "4000",
+      "imageUrl": "aaa",
+      "id": 5
     }
   ]
 }
