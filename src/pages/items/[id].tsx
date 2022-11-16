@@ -3,10 +3,21 @@ import { GetItemDetail } from 'components/GetItemDetail';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Link from 'next/link';
 import { FetchData } from '../../../posts/post';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+
+type Option = {
+  // 識別子
+  id: number;
+  // オプションの名前
+  name: string;
+  // オプションの説明
+  description: string;
+  // オプションの価格
+  price: number;
+};
 
 type FormValues = {
-  id: number,
+  id: number;
   name: string;
   description: string;
   price: number;
@@ -21,6 +32,7 @@ type Item = {
   price: number;
   imageUrl: string;
   deleted: boolean;
+  options: Option[];
 };
 
 export async function getStaticPaths() {
@@ -54,11 +66,19 @@ export async function getStaticProps({
 
 export default function Detail({ data }: { data: Item }) {
   const router = useRouter();
-  const { register, handleSubmit} = useForm<FormValues>({defaultValues: {id: data.id, name: data.name, description:data.description, price:data.price, imageUrl: data.imageUrl }});
-  const onSubmit:SubmitHandler<FormValues> = (data) => {
+  const { register, handleSubmit } = useForm<FormValues>({
+    defaultValues: {
+      id: data.id,
+      name: data.name,
+      description: data.description,
+      price: data.price,
+      imageUrl: data.imageUrl,
+    },
+  });
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     data.price = Number(data.price);
-    FetchData(data,'PATCH').then(() => router.push(`/`));
-  } 
+    FetchData(data, 'PATCH').then(() => router.push(`/`));
+  };
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -72,14 +92,44 @@ export default function Detail({ data }: { data: Item }) {
             <th>削除フラグ</th>
           </tr>
           <tr>
-            <td><input id="id" type="hidden" {...register('id')} />{data.id}</td>
-            <td><input id="name" {...register('name')} /></td>
-            <td><input id="description" {...register('description')} /></td>
-            <td><input id="price" {...register('price')} /></td>
-            <td><input id="imageUrl" {...register('imageUrl')} /></td>
+            <td>{data.id}</td>
+            <td>
+              <input id="name" {...register('name')} />
+            </td>
+            <td>
+              <input id="description" {...register('description')} />
+            </td>
+            <td>
+              <input id="price" {...register('price')} />
+            </td>
+            <td>
+              <input id="imageUrl" {...register('imageUrl')} />
+            </td>
             <td>{data.deleted ? 'true' : 'false'}</td>
           </tr>
         </table>
+
+        {typeof data.options === 'undefined'
+          ? ''
+          : data.options.map((option) => (
+              <table key={option.id}>
+                <tr>
+                  <th colSpan={4}>オプション情報(ID:{option.id})</th>
+                </tr>
+                <tr>
+                  <th>ID</th>
+                  <th>名称</th>
+                  <th>説明</th>
+                  <th>価格</th>
+                </tr>
+                <tr>
+                  <td>{option.id}</td>
+                  <td>{option.name}</td>
+                  <td>{option.description}</td>
+                  <td>{option.price}</td>
+                </tr>
+              </table>
+            ))}
         <button type="submit">更新</button>
       </form>
       <Link href="/">一覧へ</Link>
