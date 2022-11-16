@@ -8,7 +8,7 @@ body {
 
 a {
   color: inherit;
-  text-decoration: none;
+  /* text-decoration: none; */
 }
 
 * {
@@ -23,4 +23,24 @@ a {
     color: white;
     background: black;
   }
+}
+
+/* テーブルのcssを追加 */
+table , td, th {
+	border: 1px solid #595959;
+	border-collapse: collapse;
+}
+td, th {
+	padding: 3px;
+	/* width: 30px;
+	height: 25px; */
+}
+th {
+	background: #f0e6cc;
+}
+.even {
+	background: #fbf8f0;
+}
+.odd {
+	background: #fefcf9;
 }
