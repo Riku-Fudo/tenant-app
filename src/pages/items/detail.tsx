@@ -1,9 +1,9 @@
-import { GetItemId } from 'components/GetItemId';
-import { GetItemDetail } from 'components/GetItemDetail';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Link from 'next/link';
 import { FetchData } from '../../../posts/post';
 import { useRouter } from 'next/router';
+import {GetServerSideProps} from "next";
+import Image from 'next/image';
 
 type Option = {
   // 識別子
@@ -35,33 +35,15 @@ type Item = {
   options: Option[];
 };
 
-export async function getStaticPaths() {
-  //const paths = GetItemId();
-  //商品ID一覧を取得する
-  const res = await fetch('http://localhost:8000/items/');
-  const posts = await res.json();
-  const paths = posts.map((item: Item) => ({
-    params: {
-      id: item.id.toString(),
-    },
-  }));
-  return {
-    paths,
-    fallback: false,
-  };
-}
+export const getServerSideProps: GetServerSideProps= async ({query}) =>{
+  // リクエストパラメータから対象IDを取得
+  const id = query.id;
+  const res = await fetch(`http://localhost:8000/items/${id}`);
+  const data = await res.json();
 
-export async function getStaticProps({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const data = await GetItemDetail(params.id);
-  return {
-    props: {
-      data,
-    },
-  };
+  return{
+    props:{data}
+  }
 }
 
 export default function Detail({ data }: { data: Item }) {
@@ -81,6 +63,7 @@ export default function Detail({ data }: { data: Item }) {
   };
   return (
     <>
+      <Image src={data.imageUrl} width={200} height={150} alt={'商品画像のURL'} />
       <form onSubmit={handleSubmit(onSubmit)}>
         <table>
           <tr>
