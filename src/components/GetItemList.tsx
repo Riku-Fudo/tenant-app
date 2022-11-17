@@ -1,16 +1,15 @@
-import UseSWR from 'swr';
+import UseSWR, { useSWRConfig } from 'swr';
 import Link from "next/link";
 import { FetchData } from '../../posts/post';
-import { useRouter } from 'next/router'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 // 商品一覧の取得と描画
 export default function GetItemList() {
-  const router = useRouter();
+  const { mutate } = useSWRConfig()
   const del = (id:number) => {
     const data = {id: id, deleted: true};
-    FetchData(data,'PATCH').then(() => router.reload());
+    FetchData(data,'PATCH').then(() => mutate('api/items?deleted=false'));
   };
 
   // 商品一覧を取得する
@@ -39,7 +38,7 @@ export default function GetItemList() {
             <td>{item.name}</td>
             <td>{item.description}</td>
             <td>
-              <Link href={`/items/${item.id}`}>詳細</Link>
+              <Link href={`/items/detail?id=${item.id}`}>詳細</Link>
             </td>
             <td>
               <button type="submit" onClick={() => del(item.id)}>削除</button>
