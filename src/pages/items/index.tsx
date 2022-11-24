@@ -1,10 +1,12 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import styles from '../styles/Home.module.css';
+import styles from '../../styles/Home.module.css';
 import GetItemList from 'components/GetItemList';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export default function Home() {
+  const router = useRouter();
   return (
     <div className={styles.container}>
       <Head>
@@ -19,9 +21,15 @@ export default function Home() {
       <main className={styles.main}>
         <GetItemList />
         <Link href="/items/create">登録画面へ</Link>
+        <Link href="/items/cart">カート画面へ</Link>
       </main>
 
       <footer className={styles.footer}>
+        <Link href="/api/logout" onClick={ async (e) => {
+          e.preventDefault();
+          await fetch('/api/logout')
+          router.push('/login')
+        }}>ログアウト</Link>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"

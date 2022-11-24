@@ -4,6 +4,8 @@ import { FetchData } from '../../../posts/post';
 import { useRouter } from 'next/router';
 import {GetServerSideProps} from "next";
 import Image from 'next/image';
+import { withIronSessionSsr } from "iron-session/next";
+import {ironOptions} from "../../../lib/config";
 
 type Option = {
   // 識別子
@@ -35,16 +37,51 @@ type Item = {
   options: Option[];
 };
 
-export const getServerSideProps: GetServerSideProps= async ({query}) =>{
-  // リクエストパラメータから対象IDを取得
-  const id = query.id;
-  const res = await fetch(`http://localhost:8000/items/${id}`);
-  const data = await res.json();
+// export const getServerSideProps: GetServerSideProps = async ({req,query}) => {
+//   console.log(req);
+//   const result = await fetch('http://localhost:3000/api/user', {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: req,
+//   });
 
-  return{
-    props:{data}
-  }
-}
+//   const user = await result.json();
+//   console.log(`ユーザ情報:${user.id}`);
+
+
+//   // リクエストパラメータから対象IDを取得
+//   const id = query.id;
+//   const res = await fetch(`http://localhost:8000/items/${id}`);
+//   const data = await res.json();
+//   return {
+//     props: {data},
+//   };
+// }
+
+export const getServerSideProps: GetServerSideProps= withIronSessionSsr(
+  async function getServerSideProps({ req, query }) {
+    const user = req.session.user;
+    if (user!== undefined && user.admin !== true) {
+      return {
+        notFound: true,
+      };
+    }
+    
+    console.log(`ユーザ情報：${user?.id}`);
+    // リクエストパラメータから対象IDを取得
+    const id:any = query.id;
+    const res = await fetch(`http://localhost:8000/items/${id}`);
+    const data = await res.json();
+
+    return {
+      props: {
+        user: req.session.user,
+        data: data
+      },
+    };
+  },
+  ironOptions
+)
 
 export default function Detail({ data }: { data: Item }) {
   const router = useRouter();
@@ -57,9 +94,17 @@ export default function Detail({ data }: { data: Item }) {
       imageUrl: data.imageUrl,
     },
   });
+  // const onSubmit: SubmitHandler<FormValues> = (data) => {
+  //   data.price = Number(data.price);
+  //   FetchData(data, 'PATCH').then(() => router.push(`/items`));
+  // };
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    data.price = Number(data.price);
-    FetchData(data, 'PATCH').then(() => router.push(`/`));
+    console.log(data);
+    fetch('/api/cart', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }).then(() => router.push(`/items/cart`));
   };
   return (
     <>
@@ -75,7 +120,7 @@ export default function Detail({ data }: { data: Item }) {
             <th>削除フラグ</th>
           </tr>
           <tr>
-            <td>{data.id}</td>
+            <td><input id="id" {...register('id')} /></td>
             <td>
               <input id="name" {...register('name')} />
             </td>
@@ -113,7 +158,8 @@ export default function Detail({ data }: { data: Item }) {
                 </tr>
               </table>
             ))}
-        <button type="submit">更新</button>
+        {/* <button type="submit">更新</button> */}
+        <button type="submit">カートに追加</button>
       </form>
       <Link href="/">一覧へ</Link>
     </>
