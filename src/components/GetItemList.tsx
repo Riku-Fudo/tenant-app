@@ -14,13 +14,13 @@ export default function GetItemList() {
 
   // 商品一覧を取得する
   const { data, error } = UseSWR(
-    'api/items?deleted=false',
+    '/api/items?deleted=false',
     fetcher
   );
   // エラーなら一覧取得失敗を画面表示
-  if (error) return <div>Failed to load</div>;
+  if (error) return <div>エラー</div>;
   // 取得待ち
-  if (!data) return <div>Loading...</div>;
+  if (!data) return <div>ロード中...</div>;
 
   return (
     <table>
